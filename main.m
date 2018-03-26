@@ -45,7 +45,7 @@ E = rand(size(X,1),size(N,1));
 % To update Y - second equation
 %C = rand(size(Y,1),size(X,1));
 %D = rand(size(Y,1),size(U,1));
-C = [2, 1];
+C = [2, 1, 0];
 D = 0;
 F = rand(size(Y,1),size(N,1));
 
