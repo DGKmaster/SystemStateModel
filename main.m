@@ -34,57 +34,59 @@ Y = Y';
 
 %% Create state matrices
 % To update X - first equation
+
 %A = rand(size(X,1),size(X,1));
-%B = rand(size(X,1),size(U,1));
 A = [0, 1, 0;
-    0, 0, 1;
+     0, 0, 1;
     -0.2, -1, -1];
+
+%B = rand(size(X,1),size(U,1));
 B = [0; 0; 1];
+
 E = rand(size(X,1),size(N,1));
 
 % To update Y - second equation
 %C = rand(size(Y,1),size(X,1));
-%D = rand(size(Y,1),size(U,1));
 C = [2, 1, 0];
+%D = rand(size(Y,1),size(U,1));
+
 D = 0;
 F = rand(size(Y,1),size(N,1));
 
-%% Model system
-% Initialize history array for plot
-X_history = zeros(size(X,1),T);
-Y_history = zeros(size(Y,1),T);
-
-% Modelling
-for i = 1:T
-    X = A*X + B*U + E*N;
-    Y = C*X + D*U + F*N;
-    % Save history
-    X_history(:,i) = X;
-    Y_history(:,i) = Y;
+%% Determine stability
+eigen_values = eig(A);
+if([1, 1, 1]*(abs(eigen_values) > 1) > 0)
+    fprintf("System instable\n");
+else
+    fprintf("System stable\n");
 end
 
-% Plot graph
-% X states
-figure(1);
-plot(X_history');
-grid on;
-title('X');
+%% Model system
+% % Initialize history array for plot
+% X_history = zeros(size(X,1),T);
+% Y_history = zeros(size(Y,1),T);
+% 
+% % Modelling
+% for i = 1:T
+%     X = A*X + B*U + E*N;
+%     Y = C*X + D*U + F*N;
+%     % Save history
+%     X_history(:,i) = X;
+%     Y_history(:,i) = Y;
+% end
+% 
+% % Plot graph
+% % X states
+% figure(1);
+% plot(X_history');
+% grid on;
+% title('X');
+% 
+% % Y states
+% figure(2);
+% plot(Y_history');
+% grid on;
+% title('Y');
 
-% Y states
-figure(2);
-plot(Y_history');
-grid on;
-title('Y');
 
-%% Determine stability
-% L - Symbolic matrix self values
-% Q - Symbolic matrix
-% Lans - vector-column with real matrix self values
-syms L Q;
-Q = L*eye(size(A)) - A;
 
-equation = det(Q);
-invert_coefficients = coeffs(equation,'All');
-coefficients = fliplr(invert_coefficients);
-Lans = roots(coefficients);
-abs_Lans = abs(Lans)

@@ -49,39 +49,35 @@ C = [2, 1, 0];
 D = 0;
 F = rand(size(Y,1),size(N,1));
 
-%% Model system
-% Initialize history array for plot
-X_history = zeros(size(X,1),T);
-Y_history = zeros(size(Y,1),T);
-
-% Modelling
-for i = 1:T
-    X = A*X + B*U + E*N;
-    Y = C*X + D*U + F*N;
-    % Save history
-    X_history(:,i) = X;
-    Y_history(:,i) = Y;
-end
-
-% Plot graph
-% X states
-figure(1);
-plot(X_history');
-grid on;
-title('X');
-
-% Y states
-figure(2);
-plot(Y_history');
-grid on;
-title('Y');
+% %% Model system
+% % Initialize history array for plot
+% X_history = zeros(size(X,1),T);
+% Y_history = zeros(size(Y,1),T);
+% 
+% % Modelling
+% for i = 1:T
+%     X = A*X + B*U + E*N;
+%     Y = C*X + D*U + F*N;
+%     % Save history
+%     X_history(:,i) = X;
+%     Y_history(:,i) = Y;
+% end
+% 
+% % Plot graph
+% % X states
+% figure(1);
+% plot(X_history');
+% grid on;
+% title('X');
+% 
+% % Y states
+% figure(2);
+% plot(Y_history');
+% grid on;
+% title('Y');
 
 %% Determine stability
-% L - Symbolic matrix self values
-% Q - Symbolic matrix
-% Lans - vector-column with real matrix self values
-syms L Q;
-Q = L*eye(size(A)) - A;
-
-equation = det(Q);
-invert_coeffs = coeffs(equation,'All');
+eigen_values = eig(A);
+if([1;1;1]*(abs(eigen_values) > 1) > 0)
+    display("
+end
