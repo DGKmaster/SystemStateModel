@@ -92,6 +92,18 @@ grid on;
 title('Y');
 
 %% Determine step parameters
-for i = 1:T
-    
+Y_derivative_history = zeros(size(Y,1),T/2);
+% 0 - increasing, find maximumm, odd
+% 1 - decreasing, find minimum, even
+extreme_number = 1;
+extreme = 0;
+flag = 0;
+for i = 1:(T-1)
+   if(((Y_history(:,i+1) - Y_history(:,i))*(-1)^mod(flag,2)) > 0)
+        extreme = Y_history(:,i+1);
+   else
+        Y_derivative_history(:,extreme_number) = extreme;
+        extreme_number = extreme_number + 1;
+        flag = flag +1;
+   end
 end
