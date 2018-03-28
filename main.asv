@@ -84,7 +84,4 @@ syms L Q;
 Q = L*eye(size(A)) - A;
 
 equation = det(Q);
-invert_coefficients = coeffs(equation,'All');
-coefficients = fliplr(invert_coefficients);
-Lans = roots(coefficients);
-abs_Lans = abs(Lans)
+invert_coeffs = coeffs(equation,'All');
