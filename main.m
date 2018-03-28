@@ -69,10 +69,22 @@ end
 X_log = zeros(size(X,1),T);
 Y_log = zeros(size(Y,1),T);
 
+% Filter constant
+alpha = 0.1;
+
 % Modelling
 for i = 1:T
-    X = A*X + B*U + E*N;
+    % First step
+    if(i == 1)
+        X = A*X + B*U + E*N;
+        X_f = X;
+    else
+        % Filter
+        X_f = X_f + alpha*(X - X_f);
+        X = A*X_f + B*U + E*N;
+    end
     Y = C*X + D*U + F*N;
+   
     % Save history
     X_log(:,i) = X;
     Y_log(:,i) = Y;
