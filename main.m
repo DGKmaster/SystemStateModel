@@ -58,7 +58,7 @@ F = rand(size(Y,1),size(N,1));
 
 %% Determine stability
 eigen_values = eig(A);
-if([1, 1, 1]*(abs(eigen_values) > 1) > 0)
+if(find(abs(eigen_values) > 1) > 0)
     fprintf("System instable\n");
 else
     fprintf("System stable\n");
@@ -95,6 +95,8 @@ title('Y');
 Y_d_log = zeros(size(Y,1),T/2);
 % 0 - increasing, find maximumm, odd
 % 1 - decreasing, find minimum, even
+
+% Find all extremes
 extreme_num = 1;
 extreme = 0;
 for i = 1:(T-1)
@@ -105,3 +107,17 @@ for i = 1:(T-1)
         extreme_num = extreme_num + 1;
    end
 end
+
+% Determine step response time
+bias = 0.05;
+for i = 1:(size(Y_d_log, 2) - 1)
+    if (abs(Y_d_log(:,i + 1) - Y_d_log(:,i))/(Y_d_log(:,i + 1) + Y_d_log(:,i)) < bias)
+       response_time = find(Y_log == Y_d_log(:,i + 1), 1);
+       fprintf("Response time: %d\n", response_time);
+       break; 
+    end
+end
+
+% Determine overshoot
+overshoot = (max(Y_d_log) - Y_log(T))/Y_log(T)*100;
+fprintf("Overshoot: %f%%\n", overshoot);
