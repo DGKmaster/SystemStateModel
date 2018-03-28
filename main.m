@@ -45,12 +45,15 @@ B = [0; 0; 1];
 
 E = rand(size(X,1),size(N,1));
 
+
 % To update Y - second equation
+
 %C = rand(size(Y,1),size(X,1));
 C = [2, 1, 0];
-%D = rand(size(Y,1),size(U,1));
 
+%D = rand(size(Y,1),size(U,1));
 D = 0;
+
 F = rand(size(Y,1),size(N,1));
 
 %% Determine stability
@@ -62,31 +65,45 @@ else
 end
 
 %% Model system
-% % Initialize history array for plot
-% X_history = zeros(size(X,1),T);
-% Y_history = zeros(size(Y,1),T);
-% 
-% % Modelling
-% for i = 1:T
-%     X = A*X + B*U + E*N;
-%     Y = C*X + D*U + F*N;
-%     % Save history
-%     X_history(:,i) = X;
-%     Y_history(:,i) = Y;
-% end
-% 
-% % Plot graph
-% % X states
-% figure(1);
-% plot(X_history');
-% grid on;
-% title('X');
-% 
-% % Y states
-% figure(2);
-% plot(Y_history');
-% grid on;
-% title('Y');
+% Initialize history array for plot
+X_history = zeros(size(X,1),T);
+Y_history = zeros(size(Y,1),T);
 
+% Modelling
+for i = 1:T
+    X = A*X + B*U + E*N;
+    Y = C*X + D*U + F*N;
+    % Save history
+    X_history(:,i) = X;
+    Y_history(:,i) = Y;
+end
 
+% Plot graph
+% X states
+figure(1);
+plot(X_history');
+grid on;
+title('X');
 
+% Y states
+figure(2);
+plot(Y_history');
+grid on;
+title('Y');
+
+%% Determine step parameters
+Y_derivative_history = zeros(size(Y,1),T/2);
+% 0 - increasing, find maximumm, odd
+% 1 - decreasing, find minimum, even
+extreme_number = 1;
+extreme = 0;
+flag = 0;
+for i = 1:(T-1)
+   if(((Y_history(:,i+1) - Y_history(:,i))*(-1)^mod(flag,2)) > 0)
+        extreme = Y_history(:,i+1);
+   else
+        Y_derivative_history(:,extreme_number) = extreme;
+        ++extreme_number;
+        ++flag;
+   end
+end
