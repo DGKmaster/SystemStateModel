@@ -78,18 +78,18 @@ for i = 1:T
     Y_history(:,i) = Y;
 end
 
-% Plot graph
-% X states
-figure(1);
-plot(X_history');
-grid on;
-title('X');
-
-% Y states
-figure(2);
-plot(Y_history');
-grid on;
-title('Y');
+% % Plot graph
+% % X states
+% figure(1);
+% plot(X_history');
+% grid on;
+% title('X');
+% 
+% % Y states
+% figure(2);
+% plot(Y_history');
+% grid on;
+% title('Y');
 
 %% Determine step parameters
 Y_derivative_history = zeros(size(Y,1),T/2);
@@ -100,10 +100,10 @@ extreme = 0;
 flag = 0;
 for i = 1:(T-1)
    if(((Y_history(:,i+1) - Y_history(:,i))*(-1)^mod(flag,2)) > 0)
-        extreme = Y_history(:,i+1);
+        
    else
-        Y_derivative_history(:,extreme_number) = extreme;
+        Y_derivative_history(:,extreme_number) = Y_history(:,i + (-1)^mod(flag,2));
         extreme_number = extreme_number + 1;
-        flag = flag +1;
+        flag = flag + 1;
    end
 end
